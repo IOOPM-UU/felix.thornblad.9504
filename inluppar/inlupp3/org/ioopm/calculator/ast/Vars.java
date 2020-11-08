@@ -4,7 +4,7 @@ package org.ioopm.calculator.ast;
 public class Vars extends Command {
     private SymbolicExpression x;
     public Vars (SymbolicExpression x){
-        super("Vars", x);
+        super(x);
         this.x = x;
     }
     /*

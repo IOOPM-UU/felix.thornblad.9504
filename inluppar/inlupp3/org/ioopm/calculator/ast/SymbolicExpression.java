@@ -2,11 +2,9 @@ package org.ioopm.calculator.ast;
 
     
     public abstract class SymbolicExpression {
-        private String name; 
         private String[] subExpressions;
         /// The second argument allows us to pass in 0 or more arguments
-        public SymbolicExpression(String name, Object... subExpressions) {
-            this.name = name;
+        public SymbolicExpression(Object... subExpressions) {
             this.subExpressions = new String[subExpressions.length];
             for (int i = 0; i < subExpressions.length; ++i) {
                 this.subExpressions[i] = subExpressions[i].toString();
@@ -17,7 +15,6 @@ package org.ioopm.calculator.ast;
         /// Returns e.g., "Constant(42)" if name is "Constant" and subExpressions is ["42"]
         public String toString(String msg) {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.name);
         sb.append("(");
         for (int i = 1; i < this.subExpressions.length; ++i) {
             sb.append(this.subExpressions[i]);
@@ -32,6 +29,25 @@ package org.ioopm.calculator.ast;
         public String[] getSubExpressions()
         {
             return subExpressions;
+        }
+        
+        public Boolean isConstant(){
+            return false; 
+        }
+        
+        //ska ge error
+        
+        public String getName(){
+            throw new RuntimeException("getName() called on expression with no operator");
+        }
+        
+        
+        public int getPriority() {
+            return 0;
+        }
+        
+        public double getValue() {
+            throw new RuntimeException("getValue() called on expression that is not an constant");
         }
     }
 

@@ -1,2 +1,5 @@
-public class NamedConstant {
+public class NamedConstant{
+    public NamedConstant(){
+        
+    }
 }

@@ -13,9 +13,9 @@ public class Variable extends Atom {
     }
     
     @Override
-       public int getPriority (){
-           return 350;
-       }
+    public int getPriority (){
+        return 350;
+    }
        
     public boolean equals(Object other) {
         if (other instanceof Variable) {

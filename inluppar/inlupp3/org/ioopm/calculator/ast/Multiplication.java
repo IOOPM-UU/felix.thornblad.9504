@@ -18,4 +18,17 @@ public class Multiplication extends Binary {
     public int getPriority (){
         return 100;
     }
+    
+    public boolean equals(Object other) {
+        if (other instanceof Multiplication) {
+            return this.equals((Multiplication) other);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean equals(Multiplication other) {
+        /// access a private field of other!
+        return (this.lhs == other.lhs && this.rhs == other.rhs);
+    }
 }

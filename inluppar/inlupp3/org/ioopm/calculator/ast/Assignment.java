@@ -18,4 +18,17 @@ public class Assignment extends Binary{
     public int getPriority (){
         return 0;
     }
+    
+    public boolean equals(Object other) {
+        if (other instanceof Assignment) {
+            return this.equals((Assignment) other);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean equals(Assignment other) {
+        /// access a private field of other!
+        return (this.lhs == other.lhs && this.rhs == other.rhs);
+    }
 }

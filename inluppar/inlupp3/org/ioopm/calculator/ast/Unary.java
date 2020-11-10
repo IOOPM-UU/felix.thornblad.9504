@@ -9,4 +9,17 @@ public abstract class Unary extends SymbolicExpression {
     public String toString() {
         return this.getName() + "(" + this.lhs.toString() + ")";
     }
+    
+    public boolean equals(Object other) {
+        if (other instanceof Unary && this.getClass() == other.getClass()) {
+            return this.equals((Unary) other);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean equals(Unary other) {
+        /// access a private field of other!
+        return this.lhs == other.lhs;
+    }
 }

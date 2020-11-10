@@ -1,27 +1,24 @@
 package org.ioopm.calculator.ast;
 
 public abstract class Atom extends SymbolicExpression {
+    private String leaf;
     public Atom(String x) {
         super(x);
+        this.leaf = x;
     }
     //toString
     
-    @Override
-    public Boolean isConstant (){
-        return true;
-    }
     
     public boolean equals(Object other) {
-        if (other instanceof Atom) {
+        if (other instanceof Atom && this.getClass() == other.getClass()) {
             return this.equals((Atom) other);
         } else {
             return false;
         }
     }
-/*
+
     public boolean equals(Atom other) {
         /// access a private field of other!
-        return this.value == other.value;
+        return this.leaf.equals(other.leaf);
     }
-    */
 }

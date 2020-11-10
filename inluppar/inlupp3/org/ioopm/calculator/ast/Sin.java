@@ -13,8 +13,20 @@ public class Sin extends Unary {
     }
     
     @Override
-       public int getPriority (){
-           return 25;
-       }
+    public int getPriority (){
+        return 25;
+    }
     
+    public boolean equals(Object other) {
+        if (other instanceof Sin) {
+            return this.equals((Sin) other);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean equals(Sin other) {
+        /// access a private field of other!
+        return this.lhs == other.lhs;
+    }
 }

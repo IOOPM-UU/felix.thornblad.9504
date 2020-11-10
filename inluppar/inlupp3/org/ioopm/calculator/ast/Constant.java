@@ -13,14 +13,19 @@ public class Constant extends Atom {
     }
     
     @Override
+    public Boolean isConstant (){
+        return true;
+    }
+    
+    @Override
     public String toString() {
         return String.valueOf(value);  
     }
     
     @Override
-       public int getPriority (){
-           return 350;
-       }
+    public int getPriority (){
+        return 350;
+    }
        
     public boolean equals(Object other) {
         if (other instanceof Constant) {

@@ -16,5 +16,17 @@ public class Exp extends Unary {
     public int getPriority (){
         return 200;
     }
-      
+    
+    public boolean equals(Object other) {
+        if (other instanceof Exp) {
+            return this.equals((Exp) other);
+        } else {
+            return false;
+        }
+    }
+
+    public boolean equals(Exp other) {
+        /// access a private field of other!
+        return this.lhs == other.lhs;
+    }  
 }

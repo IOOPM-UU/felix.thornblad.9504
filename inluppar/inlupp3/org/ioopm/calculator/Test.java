@@ -13,8 +13,8 @@ public class Test{
     }
     
     public static void testEvaluating(SymbolicExpression expected, SymbolicExpression e) {
-    SymbolicExpression r = e.eval();
-    if (r.equals(expected)) {
+    //SymbolicExpression r = e.eval();
+    if (e.equals(expected)) {
         System.out.println("Passed: " + e);
     } else {
         System.out.println("Error: expected '" + expected + "' but got '" + e + "'");
@@ -42,7 +42,19 @@ public class Test{
         testPrinting("(-5.0)", n);
         testPrinting("sin (x)", s1);
         
+        testEvaluating(c1, c2);
+        testEvaluating(c1, c1);
+        testEvaluating(a, a);
+        testEvaluating(c3, c3);
+        testEvaluating(n, n);
+        
         //testEvaluating();
+        
+        SymbolicExpression c = new Addition(new Constant(5), new Constant(37));
+        SymbolicExpression b = new Constant(42);
+        testEvaluating(b, c); /// Tests if reducing a returns b (it should!)
+
+
 
     }
 

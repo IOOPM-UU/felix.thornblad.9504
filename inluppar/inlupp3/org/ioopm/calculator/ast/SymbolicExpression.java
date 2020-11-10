@@ -13,7 +13,7 @@ package org.ioopm.calculator.ast;
         
       
         /// Returns e.g., "Constant(42)" if name is "Constant" and subExpressions is ["42"]
-        public String toString(String msg) {
+        public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
         for (int i = 1; i < this.subExpressions.length; ++i) {
@@ -43,11 +43,17 @@ package org.ioopm.calculator.ast;
         
         
         public int getPriority() {
-            return 0;
+            throw new RuntimeException("getPriority() called on expression that is not an operator");
         }
         
         public double getValue() {
             throw new RuntimeException("getValue() called on expression that is not an constant");
         }
+        
+        public SymbolicExpression eval(){
+            //dummy
+            return new Constant(42.0);
+        }
+        
     }
 

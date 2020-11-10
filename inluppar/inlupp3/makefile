@@ -6,6 +6,9 @@ all:
 
 run:
 	java -cp classes/org/ioopm/calculator Calculator
+	
+test:
+	java -cp classes/org/ioopm/calculator Test
 
 clean:
 	rm -rf classes

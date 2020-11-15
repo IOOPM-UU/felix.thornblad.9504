@@ -9,4 +9,8 @@ public abstract class Command extends SymbolicExpression {
     public static SymbolicExpression instance() {
        return x;
     }
+    
+    public SymbolicExpression eval(Environment vars){
+        throw new RuntimeException("eval() called on expression with no operator");
+    }
 }

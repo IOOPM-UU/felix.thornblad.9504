@@ -1,7 +1,5 @@
 package org.ioopm.calculator.ast;
-// public class Environment extends HashMap<Variable, SymbolicExpression> {}
-        public class Environment {
-            public Environment(){
-                
-            }
-        }
+import java.util.HashMap;
+
+//public class Environment extends HashMap<Variable, SymbolicExpression> {}
+public class Environment extends HashMap<String, SymbolicExpression> {}

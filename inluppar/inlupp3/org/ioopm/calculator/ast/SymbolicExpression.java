@@ -49,10 +49,7 @@ public abstract class SymbolicExpression {
         throw new RuntimeException("getValue() called on expression that is not an constant");
     }
         
-    public SymbolicExpression eval(){
-        //dummy
-        return new Constant(42.0);
-    }
+    public abstract SymbolicExpression eval(Environment vars);
         
     public boolean equals(Object other) {
         if (other instanceof SymbolicExpression && this.getClass() == other.getClass()) {
@@ -61,11 +58,13 @@ public abstract class SymbolicExpression {
             return false;
         }
     }
-
+/* override does not work as in type is matched only here
     public boolean equals(SymbolicExpression other) {
+         System.out.println("symb");
         /// access a private field of other!
         return this.subExpressions == other.subExpressions;
     }
+    */
         
 }
 

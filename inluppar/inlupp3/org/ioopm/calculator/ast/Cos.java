@@ -1,10 +1,10 @@
 package org.ioopm.calculator.ast;
 
 public class Cos extends Unary {
-    private SymbolicExpression lhs;
-    public Cos(final SymbolicExpression lhs){
-        super(lhs);
-        this.lhs = lhs;
+    private SymbolicExpression arg;
+    public Cos(final SymbolicExpression arg){
+        super(arg);
+        this.arg = arg;
     }
     
     @Override
@@ -27,6 +27,16 @@ public class Cos extends Unary {
 
     public boolean equals(Cos other) {
         /// access a private field of other!
-        return this.lhs == other.lhs;
+        return this.arg == other.arg;
     }
+    
+    public SymbolicExpression eval(Environment vars) {
+        SymbolicExpression arg = this.arg.eval(vars);
+        if (arg.isConstant()) {
+            return new Constant(Math.cos(arg.getValue()));
+        } else {
+            return new Cos(arg);
+        }
+    }
+
 }

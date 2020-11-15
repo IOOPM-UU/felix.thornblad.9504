@@ -29,4 +29,16 @@ public class Variable extends Atom {
         /// access a private field of other!
         return this.id == other.id;
     }
+    
+    public SymbolicExpression eval (Environment vars){
+        if(vars.containsKey(this.id))
+        {
+            return vars.get(id);
+        }
+        else
+        {
+            return new Variable(id);
+        }
+        
+    }
 }

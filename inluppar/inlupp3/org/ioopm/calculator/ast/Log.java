@@ -1,10 +1,10 @@
 package org.ioopm.calculator.ast;
 
 public class Log extends Unary {
-    private SymbolicExpression lhs;
-    public Log (final SymbolicExpression lhs){
-        super(lhs);
-        this.lhs = lhs;
+    private SymbolicExpression arg;
+    public Log (final SymbolicExpression arg){
+        super(arg);
+        this.arg = arg;
     }
     
     @Override
@@ -27,6 +27,16 @@ public class Log extends Unary {
 
     public boolean equals(Log other) {
         /// access a private field of other!
-        return this.lhs == other.lhs;
-    }    
+        return this.arg == other.arg;
+    }
+    
+    public SymbolicExpression eval (Environment vars) {
+        SymbolicExpression arg = this.arg.eval(vars);
+        if (arg.isConstant()) {
+            return new Constant(Math.log(arg.getValue()));
+        } else {
+            return new Log(arg);
+        }
+    }
+
 }

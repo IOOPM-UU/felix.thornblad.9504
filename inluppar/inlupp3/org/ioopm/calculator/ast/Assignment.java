@@ -31,4 +31,18 @@ public class Assignment extends Binary{
         /// access a private field of other!
         return (this.lhs == other.lhs && this.rhs == other.rhs);
     }
+    
+    public SymbolicExpression eval(Environment vars) {
+        SymbolicExpression arg = this.lhs.eval(vars);
+        if (arg.isConstant()) {
+            //vars.put(new Variable(rhs.toString()), new Constant(arg.getValue()));
+            vars.put(rhs.toString(), new Constant(arg.getValue()));
+            //return new Assignment(new Constant(arg.getValue()), new Variable(rhs.toString()));
+            return new Variable(this.rhs.toString()).eval(vars);
+        } else {
+            return new Assignment(arg, this.rhs);
+        }
+    }
+    
+    
 }

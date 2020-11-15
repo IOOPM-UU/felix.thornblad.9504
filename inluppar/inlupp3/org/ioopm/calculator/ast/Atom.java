@@ -2,11 +2,12 @@ package org.ioopm.calculator.ast;
 
 public abstract class Atom extends SymbolicExpression {
     private String leaf;
-    public Atom(String x) {
-        super(x);
-        this.leaf = x;
+    public Atom(String leaf) {
+        super(leaf);
+        this.leaf = leaf;
     }
     //toString
+    
     
     
     public boolean equals(Object other) {
@@ -16,9 +17,10 @@ public abstract class Atom extends SymbolicExpression {
             return false;
         }
     }
-
+/*
     public boolean equals(Atom other) {
         /// access a private field of other!
         return this.leaf.equals(other.leaf);
     }
+    */
 }

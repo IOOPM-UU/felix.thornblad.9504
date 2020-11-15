@@ -31,4 +31,15 @@ public class Multiplication extends Binary {
         /// access a private field of other!
         return (this.lhs == other.lhs && this.rhs == other.rhs);
     }
+    
+    public SymbolicExpression eval(Environment vars) {
+        SymbolicExpression lhs = this.lhs.eval(vars);
+        SymbolicExpression rhs = this.rhs.eval(vars);
+        if (lhs.isConstant() && rhs.isConstant()) {
+            return new Constant(lhs.getValue() * rhs.getValue());
+        } else {
+            return new Multiplication(lhs, rhs);
+        }
+    }
+
 }

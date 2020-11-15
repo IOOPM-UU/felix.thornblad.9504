@@ -26,7 +26,7 @@ public class Constant extends Atom {
     public int getPriority (){
         return 350;
     }
-       
+    @Override
     public boolean equals(Object other) {
         if (other instanceof Constant) {
             return this.equals((Constant) other);
@@ -37,7 +37,11 @@ public class Constant extends Atom {
 
     public boolean equals(Constant other) {
         /// access a private field of other!
-        return this.value == other.value;
+        return this.value == other.getValue();
+    }
+    
+    public SymbolicExpression eval (Environment vars){
+        return new Constant(value);
     }
 
 }

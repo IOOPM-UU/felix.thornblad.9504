@@ -1,10 +1,10 @@
 package org.ioopm.calculator.ast;
 
 public class Sin extends Unary {
-    private SymbolicExpression lhs;
-    public Sin (final SymbolicExpression lhs){
-        super(lhs);
-        this.lhs = lhs;
+    private SymbolicExpression arg;
+    public Sin (final SymbolicExpression arg){
+        super(arg);
+        this.arg = arg;
     }
     
     @Override
@@ -27,6 +27,15 @@ public class Sin extends Unary {
 
     public boolean equals(Sin other) {
         /// access a private field of other!
-        return this.lhs == other.lhs;
+        return this.arg == other.arg;
+    }
+    
+    public SymbolicExpression eval(Environment vars) {
+        SymbolicExpression arg = this.arg.eval(vars);
+        if (arg.isConstant()) {
+            return new Constant(Math.sin(arg.getValue()));
+        } else {
+            return new Sin(arg);
+        }
     }
 }

@@ -1,15 +1,15 @@
 package org.ioopm.calculator.ast;
 
 public class Exp extends Unary {
-    private SymbolicExpression lhs;
-    public Exp (final SymbolicExpression lhs){
-        super (lhs);
-        this.lhs = lhs;
+    private SymbolicExpression arg;
+    public Exp (final SymbolicExpression arg){
+        super (arg);
+        this.arg = arg;
     }
     
     @Override
     public String getName (){
-        return "^ ";
+        return "exp";
     }
     
     @Override
@@ -27,6 +27,15 @@ public class Exp extends Unary {
 
     public boolean equals(Exp other) {
         /// access a private field of other!
-        return this.lhs == other.lhs;
-    }  
+        return this.arg == other.arg;
+    }
+    
+    public SymbolicExpression eval(Environment vars) {
+        SymbolicExpression arg = this.arg.eval(vars);
+        if (arg.isConstant()) {
+            return new Constant(Math.exp(arg.getValue()));
+        } else {
+            return new Exp(arg);
+        }
+    }
 }

@@ -16,7 +16,8 @@ public class Variable extends Atom {
     public int getPriority (){
         return 350;
     }
-       
+    
+    @Override   
     public boolean equals(Object other) {
         if (other instanceof Variable) {
             return this.equals((Variable) other);
@@ -30,6 +31,7 @@ public class Variable extends Atom {
         return this.id == other.id;
     }
     
+    @Override
     public SymbolicExpression eval (Environment vars){
         if(vars.containsKey(this.id))
         {
@@ -39,6 +41,5 @@ public class Variable extends Atom {
         {
             return new Variable(id);
         }
-        
     }
 }

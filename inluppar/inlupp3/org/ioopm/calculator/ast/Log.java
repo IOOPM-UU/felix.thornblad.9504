@@ -17,6 +17,7 @@ public class Log extends Unary {
         return 250;
     }
     
+    @Override
     public boolean equals(Object other) {
         if (other instanceof Log) {
             return this.equals((Log) other);
@@ -30,6 +31,7 @@ public class Log extends Unary {
         return this.arg == other.arg;
     }
     
+    @Override
     public SymbolicExpression eval (Environment vars) {
         SymbolicExpression arg = this.arg.eval(vars);
         if (arg.isConstant()) {

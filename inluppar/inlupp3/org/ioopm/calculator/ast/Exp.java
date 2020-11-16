@@ -17,6 +17,7 @@ public class Exp extends Unary {
         return 200;
     }
     
+    @Override
     public boolean equals(Object other) {
         if (other instanceof Exp) {
             return this.equals((Exp) other);
@@ -30,6 +31,7 @@ public class Exp extends Unary {
         return this.arg == other.arg;
     }
     
+    @Override
     public SymbolicExpression eval(Environment vars) {
         SymbolicExpression arg = this.arg.eval(vars);
         if (arg.isConstant()) {

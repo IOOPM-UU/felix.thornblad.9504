@@ -3,13 +3,12 @@ package org.ioopm.calculator.ast;
 public abstract class Atom extends SymbolicExpression {
     private String leaf;
     public Atom(String leaf) {
-        super(leaf);
         this.leaf = leaf;
     }
     //toString
     
     
-    
+    @Override
     public boolean equals(Object other) {
         if (other instanceof Atom && this.getClass() == other.getClass()) {
             return this.equals((Atom) other);

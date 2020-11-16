@@ -1,15 +1,20 @@
 package org.ioopm.calculator.ast;
 
 public abstract class Command extends SymbolicExpression {
-    static SymbolicExpression x;
-    public Command(SymbolicExpression x) {
-        super("");
-        this.x = x;
+    
+    public Command() {
+        
     }
     public static SymbolicExpression instance() {
-       return x;
+        return (new Constant(5));
     }
     
+    @Override
+    public Boolean isCommand(){
+        return true;
+    }
+    
+    @Override
     public SymbolicExpression eval(Environment vars){
         throw new RuntimeException("eval() called on expression with no operator");
     }

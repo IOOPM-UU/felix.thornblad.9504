@@ -40,6 +40,7 @@ public class Constant extends Atom {
         return this.value == other.getValue();
     }
     
+    @Override
     public SymbolicExpression eval (Environment vars){
         return new Constant(value);
     }

@@ -25,6 +25,7 @@ public class Addition extends Binary{
         return 50;
     }
     
+    @Override
     public boolean equals(Object other) {
         if (other instanceof Addition) {
             return this.equals((Addition) other);
@@ -38,6 +39,7 @@ public class Addition extends Binary{
         return (this.lhs == other.lhs && this.rhs == other.rhs);
     }
     
+    @Override
     public SymbolicExpression eval (Environment vars) {
         SymbolicExpression lhs = this.lhs.eval(vars);
         SymbolicExpression rhs = this.rhs.eval(vars);

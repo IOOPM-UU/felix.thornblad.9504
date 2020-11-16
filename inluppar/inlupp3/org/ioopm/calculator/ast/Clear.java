@@ -1,14 +1,10 @@
 package org.ioopm.calculator.ast;
 
 public class Clear extends Command {
-    private static SymbolicExpression x;
-    public Clear (SymbolicExpression x){
-        super(x);
-        this.x = x;
+    private static final Clear theInstance = new Clear();
+    private Clear() {}
+    public static Clear instance() {
+        return theInstance;
     }
-    /*
-    public static SymbolicExpression instance() {
-        return x;
-    }
-    */
+    
 }

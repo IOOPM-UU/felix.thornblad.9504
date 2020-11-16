@@ -19,6 +19,7 @@ public class Division extends Binary {
         return 100;
     }
     
+    @Override
     public boolean equals(Object other) {
         if (other instanceof Division) {
             return this.equals((Division) other);
@@ -32,6 +33,7 @@ public class Division extends Binary {
         return (this.lhs == other.lhs && this.rhs == other.rhs);
     }
     
+    @Override
     public SymbolicExpression eval(Environment vars) {
         SymbolicExpression lhs = this.lhs.eval(vars);
         SymbolicExpression rhs = this.rhs.eval(vars);

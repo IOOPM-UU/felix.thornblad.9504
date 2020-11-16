@@ -17,6 +17,7 @@ public class Sin extends Unary {
         return 25;
     }
     
+    @Override
     public boolean equals(Object other) {
         if (other instanceof Sin) {
             return this.equals((Sin) other);
@@ -30,6 +31,7 @@ public class Sin extends Unary {
         return this.arg == other.arg;
     }
     
+    @Override
     public SymbolicExpression eval(Environment vars) {
         SymbolicExpression arg = this.arg.eval(vars);
         if (arg.isConstant()) {

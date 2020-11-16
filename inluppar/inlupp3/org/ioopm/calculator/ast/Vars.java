@@ -1,14 +1,10 @@
 package org.ioopm.calculator.ast;
 
-
 public class Vars extends Command {
-    private SymbolicExpression x;
-    public Vars (SymbolicExpression x){
-        super(x);
+    private static final Vars theInstance = new Vars();
+    private Vars() {}
+    public static Vars instance() {
+        return theInstance;
     }
-    /*
-    public SymbolicExpression instance() {
-        return x;
-    }
-    */
+    
 }

@@ -19,6 +19,7 @@ public class Assignment extends Binary{
         return 0;
     }
     
+    @Override
     public boolean equals(Object other) {
         if (other instanceof Assignment) {
             return this.equals((Assignment) other);
@@ -32,6 +33,7 @@ public class Assignment extends Binary{
         return (this.lhs == other.lhs && this.rhs == other.rhs);
     }
     
+    @Override
     public SymbolicExpression eval(Environment vars) {
         SymbolicExpression arg = this.lhs.eval(vars);
         if (arg.isConstant()) {

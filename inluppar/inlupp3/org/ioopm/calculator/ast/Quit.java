@@ -1,14 +1,10 @@
 package org.ioopm.calculator.ast;
 
 public class Quit extends Command {
-    private SymbolicExpression x;
-    public Quit (SymbolicExpression x){
-        super(x);
-        this.x = x;
+    private static final Quit theInstance = new Quit();
+    private Quit() {}
+    public static Quit instance() {
+        return theInstance;
     }
-    /*
-    public SymbolicExpression instance() {
-        return x;
-    }
-    */
+    
 }

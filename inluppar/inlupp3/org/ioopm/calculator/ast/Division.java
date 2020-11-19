@@ -1,5 +1,8 @@
 package org.ioopm.calculator.ast;
 
+/**
+ * Represents the division operation that combines two subtrees into an SymbolicExpression
+ */
 public class Division extends Binary {
     private SymbolicExpression lhs;
     private SymbolicExpression rhs;
@@ -14,6 +17,10 @@ public class Division extends Binary {
         return " / ";
     }
     
+    /**
+    * the degree of priority of the statement 
+    * @return a int representing the prioroty
+    */
     @Override
     public int getPriority (){
         return 100;
@@ -33,8 +40,16 @@ public class Division extends Binary {
         return (this.lhs == other.lhs && this.rhs == other.rhs);
     }
     
+    /**
+    * evaluating division recursive all the way to constant
+    * @param vars a hachmap with all saved varibles
+    * @return a SybolicExpression either a constant if done or a new sivition
+    */
     @Override
     public SymbolicExpression eval(Environment vars) {
+        if (lhs instanceof Warning || rhs instanceof Warning) {
+            return new Warning();
+        }
         SymbolicExpression lhs = this.lhs.eval(vars);
         SymbolicExpression rhs = this.rhs.eval(vars);
         if (lhs.isConstant() && rhs.isConstant()) {

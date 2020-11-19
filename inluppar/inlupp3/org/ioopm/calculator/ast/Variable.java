@@ -1,5 +1,8 @@
 package org.ioopm.calculator.ast;
 
+/**
+ * Represents the terminal expression as a string
+ */
 public class Variable extends Atom {
     private String id;
     public Variable (final String id){
@@ -12,6 +15,10 @@ public class Variable extends Atom {
         return id;  
     }
     
+    /**
+    * the degree of priority of the statement 
+    * @return a int representing the prioroty
+    */
     @Override
     public int getPriority (){
         return 350;
@@ -31,6 +38,11 @@ public class Variable extends Atom {
         return this.id == other.id;
     }
     
+    /**
+    * evaluating variable recursive all the way to constant
+    * @param vars a hachmap with all saved varibles
+    * @return a SybolicExpression either a constant if it is saved or a new varible
+    */
     @Override
     public SymbolicExpression eval (Environment vars){
         if(vars.containsKey(this.id))

@@ -1,5 +1,8 @@
 package org.ioopm.calculator.ast;
 
+/**
+ * Represents the exp operation on a subtree
+ */
 public class Exp extends Unary {
     private SymbolicExpression arg;
     public Exp (final SymbolicExpression arg){
@@ -12,6 +15,10 @@ public class Exp extends Unary {
         return "exp";
     }
     
+    /**
+    * the degree of priority of the statement 
+    * @return a int representing the prioroty
+    */
     @Override
     public int getPriority (){
         return 200;
@@ -31,8 +38,16 @@ public class Exp extends Unary {
         return this.arg == other.arg;
     }
     
+    /**
+    * evaluating exp recursive all the way to constant
+    * @param vars a hachmap with all saved varibles
+    * @return a SybolicExpression either a constant if done or a new exp
+    */
     @Override
     public SymbolicExpression eval(Environment vars) {
+        if (arg instanceof Warning) {
+            return new Warning();
+        }
         SymbolicExpression arg = this.arg.eval(vars);
         if (arg.isConstant()) {
             return new Constant(Math.exp(arg.getValue()));

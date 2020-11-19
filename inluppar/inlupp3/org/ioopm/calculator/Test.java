@@ -13,6 +13,9 @@ public class Test{
         }
     }
     
+    /**
+ * Equality test where expressions are evaluated
+ */
     public static void testEvaluating(SymbolicExpression expected, SymbolicExpression e, Environment vars) {
         SymbolicExpression r = e.eval(vars);
         SymbolicExpression t = expected.eval(vars);
@@ -23,6 +26,9 @@ public class Test{
         }
     }
     
+    /**
+ * Equality test where expressions are NOT evaluated 
+ */
     public static void testEquals(SymbolicExpression expected, SymbolicExpression e) {
     if (e.equals(expected)) {
             System.out.println("Passed: " + e);
@@ -48,6 +54,10 @@ public class Test{
         Cos c3 = new Cos (c4);
         Negation n = new Negation(c1);
         Sin s1 = new Sin(c1);
+        
+        NamedConstant pi = new NamedConstant("pi", Math.PI);
+        //Assignment asspi = new Assignment(c1,pi);
+        Addition api = new Addition(pi, c2);
         
         Environment vars = new Environment();
         
@@ -75,7 +85,10 @@ public class Test{
         //vars = new Environment();
         testEvaluating(ass2, ass2, vars);
         
-        //testEvaluating();
+        vars = new Environment();
+        //testEvaluating(asspi, asspi, vars);
+        testEvaluating(api, api, vars);
+        
         
         SymbolicExpression c = new Addition(new Constant(5), new Constant(37));
         SymbolicExpression b = new Constant(42);

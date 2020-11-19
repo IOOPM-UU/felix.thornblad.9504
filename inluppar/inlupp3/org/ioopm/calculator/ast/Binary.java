@@ -1,5 +1,8 @@
 package org.ioopm.calculator.ast;
 
+/**
+ * Represents all operations that combines two subtrees into an SymbolicExpression
+ */
 public abstract class Binary extends SymbolicExpression {
     private SymbolicExpression lhs;
     private SymbolicExpression rhs;
@@ -8,7 +11,10 @@ public abstract class Binary extends SymbolicExpression {
         this.rhs = rhs;
     }
     
-
+    /**
+     * Converts a binary funktions subtrees to one sting
+     * @return a String that represents the expresion 
+     */ 
     @Override
     public String toString() {
         if(this.lhs.getPriority() < this.getPriority() && this.rhs.getPriority() < this.getPriority()){
@@ -25,19 +31,6 @@ public abstract class Binary extends SymbolicExpression {
         }
             
     }
-    
-    @Override
-    public boolean equals(Object other) {
-        if (other instanceof Binary && this.getClass() == other.getClass()) {
-            return this.equals((Binary) other);
-        } else {
-            return false;
-        }
-    }
 
-    public boolean equals(Binary other) {
-        /// access a private field of other!
-        return (this.lhs == other.lhs && this.rhs == other.rhs);
-    }
 
 }

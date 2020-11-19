@@ -64,7 +64,7 @@ public class CalculatorParser {
         }
 
         if (this.st.ttype == this.st.TT_WORD) { // vilken typ det senaste tecken vi lÃ¤ste in hade.
-            if (this.st.sval.equals("Quit") || this.st.sval.equals("Vars") || this.st.sval.equals("Clear")) { // sval = string Variable
+            if (this.st.sval.equals("Quit") || this.st.sval.equals("Vars") || this.st.sval.equals("Clear") || this.st.sval.equals("Ans")){ // sval = string Variable
                 result = command();
             } else {
                 result = assignment(); // gÃ¥r vidare med uttrycket.
@@ -94,6 +94,9 @@ public class CalculatorParser {
             return Quit.instance();
         } else if (this.st.sval.equals("Clear")) {
             return Clear.instance();
+        }
+        else if (this.st.sval.equals("Ans")) {
+            return Ans.instance();
         } else {
             return Vars.instance();
         }
@@ -130,7 +133,6 @@ public class CalculatorParser {
         return result;
     }
 
-    //TODO fixa namedConstats
     /**
      * Check if valid identifier for variable and return that if so
      * @return a SymbolicExpression that is either a named constant or a new variable
@@ -138,21 +140,23 @@ public class CalculatorParser {
      * @throws IllegalExpressionException if you try to redefine a string that isn't allowed
      */
    private SymbolicExpression identifier() throws IOException {
-       SymbolicExpression result = new Variable("");
-       return result;
-       /*
+   
         SymbolicExpression result;
+        
         if (this.unallowedVars.contains(this.st.sval)) {
-            throw new IllegalExpressionException("Error: cannot redefine " + this.st.sval);
+            try {
+                throw new IllegalExpressionException("Error: cannot redefine " + this.st.sval);
+            } catch (Exception e){
+                return new Warning();
+            }
         }
-
         if (Constants.namedConstants.containsKey(this.st.sval)) {
             result = new NamedConstant(st.sval, Constants.namedConstants.get(st.sval));
         } else {
             result = new Variable(this.st.sval);
         }
         return result;
-*/    }
+        }
 
 
     /**

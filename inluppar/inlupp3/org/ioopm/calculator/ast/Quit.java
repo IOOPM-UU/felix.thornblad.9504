@@ -1,5 +1,8 @@
 package org.ioopm.calculator.ast;
 
+/**
+ * Command for ending the program
+ */
 public class Quit extends Command {
     private static final Quit theInstance = new Quit();
     private Quit() {}

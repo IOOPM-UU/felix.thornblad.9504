@@ -1,5 +1,8 @@
 package org.ioopm.calculator.ast;
 
+/**
+ * Represents the terminal expression as a number
+ */
 public class Constant extends Atom {
     private double value;
     public Constant (final double value){
@@ -22,6 +25,10 @@ public class Constant extends Atom {
         return String.valueOf(value);  
     }
     
+    /**
+    * the degree of priority of the statement 
+    * @return a int representing the prioroty
+    */
     @Override
     public int getPriority (){
         return 350;

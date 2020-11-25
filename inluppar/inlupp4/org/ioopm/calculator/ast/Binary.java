@@ -29,8 +29,5 @@ public abstract class Binary extends SymbolicExpression {
         else{
             return (this.lhs.toString() + this.getName() + this.rhs.toString());
         }
-            
     }
-
-
 }

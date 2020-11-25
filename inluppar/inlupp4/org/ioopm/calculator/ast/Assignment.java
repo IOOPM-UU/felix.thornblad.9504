@@ -16,7 +16,7 @@ public class Assignment extends Binary{
     
     @Override
     public String getName(){
-        return "=";
+        return " = ";
     }
     
     /**
@@ -28,7 +28,7 @@ public class Assignment extends Binary{
         return 0;
     }
     
-    @Override
+
     public boolean equals(Object other) {
         if (other instanceof Assignment) {
             return this.equals((Assignment) other);
@@ -50,27 +50,12 @@ public class Assignment extends Binary{
     */
     @Override
     public SymbolicExpression eval(Environment vars) {
-        if (lhs instanceof Warning || rhs instanceof Warning) {
-            return new Warning();
-        }
-        try {
             if(this.rhs.isConstant()) {
-            throw new IllegalExpressionException("Error: cannot redefine " + rhs.getValue());
-        }
-        SymbolicExpression arg = this.lhs.eval(vars);
-        if (arg.isConstant()) {
-            vars.put(rhs.toString(), new Constant(arg.getValue()));
-            return new Variable(this.rhs.toString()).eval(vars);
-        } else {
-            //return new Assignment(arg, this.rhs);
+                throw new IllegalExpressionException("Error: cannot redefine " + rhs.getValue());
+            }
+            SymbolicExpression arg = this.lhs.eval(vars);
             vars.put(rhs.toString(), arg);
             return arg;
-            
-        }
-            
-        } catch (Exception e) {
-            return new Warning();
-        }
     }
     
    

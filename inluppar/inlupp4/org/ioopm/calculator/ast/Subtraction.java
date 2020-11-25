@@ -26,7 +26,6 @@ public class Subtraction extends Binary{
         return 50;
     }
     
-    @Override
     public boolean equals(Object other) {
         if (other instanceof Subtraction) {
             return this.equals((Subtraction) other);
@@ -47,9 +46,6 @@ public class Subtraction extends Binary{
     */
     @Override
     public SymbolicExpression eval(Environment vars) {
-        if (lhs instanceof Warning || rhs instanceof Warning) {
-            return new Warning();
-        }
         SymbolicExpression lhs = this.lhs.eval(vars);
         SymbolicExpression rhs = this.rhs.eval(vars);
         if (lhs.isConstant() && rhs.isConstant()) {

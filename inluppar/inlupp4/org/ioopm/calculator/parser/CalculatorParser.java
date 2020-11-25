@@ -144,11 +144,7 @@ public class CalculatorParser {
         SymbolicExpression result;
         
         if (this.unallowedVars.contains(this.st.sval)) {
-            try {
                 throw new IllegalExpressionException("Error: cannot redefine " + this.st.sval);
-            } catch (Exception e){
-                return new Warning();
-            }
         }
         if (Constants.namedConstants.containsKey(this.st.sval)) {
             result = new NamedConstant(st.sval, Constants.namedConstants.get(st.sval));

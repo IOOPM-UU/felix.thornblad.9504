@@ -24,7 +24,6 @@ public class Variable extends Atom {
         return 350;
     }
     
-    @Override   
     public boolean equals(Object other) {
         if (other instanceof Variable) {
             return this.equals((Variable) other);

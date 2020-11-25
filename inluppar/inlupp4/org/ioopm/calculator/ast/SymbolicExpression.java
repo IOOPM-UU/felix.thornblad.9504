@@ -28,19 +28,8 @@ public abstract class SymbolicExpression {
      
     public abstract SymbolicExpression eval(Environment vars);
     
-    /**
-     * checks if an objekt is eqal to this objekt
-     * @param other the objekt that this objekt is kompared to 
-     * @return a boolean true if equal, false if not
-     */  
-    @Override  
-    public boolean equals(Object other) {
-        if (other instanceof SymbolicExpression && this.getClass() == other.getClass()) {
-            return this.equals((SymbolicExpression) other);
-        } else {
-            return false;
-        }
-    }
+
+    
         
 }
 

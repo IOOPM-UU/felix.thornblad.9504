@@ -24,7 +24,7 @@ public class Cos extends Unary {
         return 25;
     }
     
-    @Override
+
     public boolean equals(Object other) {
         if (other instanceof Cos) {
             return this.equals((Cos) other);
@@ -45,9 +45,6 @@ public class Cos extends Unary {
     */
     @Override
     public SymbolicExpression eval(Environment vars) {
-        if (arg instanceof Warning) {
-            return new Warning();
-        }
         SymbolicExpression arg = this.arg.eval(vars);
         if (arg.isConstant()) {
             return new Constant(Math.cos(arg.getValue()));

@@ -33,7 +33,7 @@ public class Constant extends Atom {
     public int getPriority (){
         return 350;
     }
-    @Override
+    
     public boolean equals(Object other) {
         if (other instanceof Constant) {
             return this.equals((Constant) other);

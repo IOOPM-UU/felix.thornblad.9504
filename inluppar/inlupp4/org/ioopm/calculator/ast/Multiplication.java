@@ -26,7 +26,6 @@ public class Multiplication extends Binary {
         return 100;
     }
     
-    @Override
     public boolean equals(Object other) {
         if (other instanceof Multiplication) {
             return this.equals((Multiplication) other);
@@ -47,9 +46,6 @@ public class Multiplication extends Binary {
     */
     @Override
     public SymbolicExpression eval(Environment vars) {
-        if (lhs instanceof Warning || rhs instanceof Warning) {
-            return new Warning();
-        }
         SymbolicExpression lhs = this.lhs.eval(vars);
         SymbolicExpression rhs = this.rhs.eval(vars);
         if (lhs.isConstant() && rhs.isConstant()) {

@@ -3,7 +3,7 @@ package org.ioopm.calculator.ast;
 /**
  * Represents the addition operation that combines two subtrees into an SymbolicExpression
  */
-public class Addition extends Binary{
+public class Addition extends Binary {
     private SymbolicExpression lhs;
     private SymbolicExpression rhs;
     
@@ -24,11 +24,11 @@ public class Addition extends Binary{
     * @return a int representing the prioroty
     */
     @Override
-    public int getPriority (){
+    public int getPriority(){
         return 50;
     }
     
-    @Override
+
     public boolean equals(Object other) {
         if (other instanceof Addition) {
             return this.equals((Addition) other);
@@ -40,6 +40,8 @@ public class Addition extends Binary{
     public boolean equals(Addition other) {
         /// access a private field of other!
         return (this.lhs == other.lhs && this.rhs == other.rhs);
+        // return (this.lhs.equals(other.lhs) && 
+        //       this.rhs.equals(other.rhs));
     }
     
     /**
@@ -49,9 +51,6 @@ public class Addition extends Binary{
     */
     @Override
     public SymbolicExpression eval (Environment vars) {
-        if (lhs instanceof Warning || rhs instanceof Warning) {
-            return new Warning();
-        }
         SymbolicExpression lhs = this.lhs.eval(vars);
         SymbolicExpression rhs = this.rhs.eval(vars);
         if (lhs.isConstant() && rhs.isConstant()) {

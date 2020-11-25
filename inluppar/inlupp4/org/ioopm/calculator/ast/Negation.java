@@ -29,7 +29,6 @@ public class Negation extends Unary {
         return "(" + (getName() + arg.toString() + ")");
     }
     
-    @Override    
     public boolean equals(Object other) {
         if (other instanceof Negation) {
             return this.equals((Negation) other);
@@ -50,9 +49,6 @@ public class Negation extends Unary {
     */
     @Override
     public SymbolicExpression eval(Environment vars) {
-        if (arg instanceof Warning) {
-            return new Warning();
-        }
         SymbolicExpression arg = this.arg.eval(vars);
         if (arg.isConstant()) {
             return new Constant(-1*(arg.getValue()));

@@ -13,9 +13,12 @@ b + 1.0
 2.0
 b + 1.0
 2.0
-{b=2.0, c=b + 1.0, a=1.0, z=4.0, ans=2.0, y=2.0, x=1.0}
+Variables: a = 1.0, ans = 2.0, b = 2.0, c = b + 1.0, x = 1.0, y = 2.0, z = 4.0
 Infinity
 Error: Expected number
 Error: Unexpected '('
 Error: cannot redefine Quit
+Variables: 
+Error, the variable x is reassigned.
+5.0
 

@@ -1,28 +1,86 @@
 package org.ioopm.calculator.ast; 
+import java.util.Stack;
+import java.util.ArrayList;
 
 public class EvaluationVisitor implements Visitor {
-    private Environment env = null;
+    private Environment env; 
+    private Environment functions;
+    private Stack<Environment> stack;
 
-    public SymbolicExpression evaluate(SymbolicExpression topLevel, Environment env) {
+    public SymbolicExpression evaluate(SymbolicExpression topLevel, Environment env, Environment functions) {
         this.env = env;
+        this.functions = functions;
+        this.stack = new Stack<Environment>(); 
+        this.stack.push(env);
+        
         return topLevel.accept(this);
     }
+    
+    public SymbolicExpression visit(Sequence n) {
+        SymbolicExpression result = null;
+        for (SymbolicExpression e : n.body()) {
+            result = e.accept(this);
+        }
+        
+        return result;
+    }
+    
+    public SymbolicExpression visit(FunctionCall n) {
+        FunctionDeclaration fun = (FunctionDeclaration) functions.get(n.identifier());
+        Sequence seq = fun.sequence();
+        if(!(seq.parameters().size() == n.arguments().size())) {
+            throw new IllegalExpressionException("Wrong amount of arguments!"); 
+        }
+        int i = 0;
+        for(SymbolicExpression arg : n.arguments()) {
+            if (arg instanceof Atom) {
+                (new Assignment(arg, new Variable(seq.parameters().get(i)))).accept(this);
+                i++;
+            } else {
+                throw new IllegalExpressionException("expected constant or variable");
+            }
+        }
+        SymbolicExpression result = seq.accept(this);
+        return result;
+    }
+   
+    
+    public SymbolicExpression visit(FunctionDeclaration n) {
+        SymbolicExpression sequence = n.sequence().accept(this);
+        return sequence;
+    }
+    
+    public SymbolicExpression visit(Conditional n) {
+        SymbolicExpression left = n.left().accept(this);
+        SymbolicExpression right = n.right().accept(this);
+        
+        if(!(left.isConstant() && right.isConstant())) {
+            throw new IllegalExpressionException("variables not defined"); 
+        }
+        
+        double differance = left.getValue() - right.getValue();
+        if (differance == 0 && n.operation().equals("==") ||
+           differance <= 0 && n.operation().equals("<=") ||
+           differance >= 0 && n.operation().equals(">=") || 
+           differance < 0 && n.operation().equals("<")   ||
+           differance > 0 && n.operation().equals(">")) 
+        {
+            return n.ifTrue().accept(this);     
+        }
+        return n.ifFalse().accept(this); 
+    }
 
-    // This method gets called from Addition.accept(Visitor v) -- you should
-    // be able to see from the eval() methods how these should behave (i.e., 
-    // compare this method with your Addition::eval() and Symbolic.addition) 
+    public SymbolicExpression visit(Scope n) {
+        this.stack.push(new Environment());
+        SymbolicExpression arg = n.arg().accept(this);
+        this.stack.pop();
+        return arg;
+    }
+    
     public SymbolicExpression visit(Addition n) {
-        // Visit the left hand side and right hand side subexpressions
         SymbolicExpression left = n.lhs().accept(this);
         SymbolicExpression right = n.rhs().accept(this);
-        // When we come back here, the visitor has visited all subexpressions, 
-        // meaning left and right point to newly created trees reduced to 
-        // the extent possible (best case -- both are constants)
-
-        // If subexpressions are fully evaluated, replace them in
-        // the tree with a constant whose value is the sub of the
-        // subexpressions, if not, simply construct a new addition
-        // node from the new subexpressions
+        
         if (left.isConstant() && right.isConstant()) {
             return new Constant(left.getValue() + right.getValue());
         } else {
@@ -67,11 +125,8 @@ public class EvaluationVisitor implements Visitor {
         SymbolicExpression left = n.lhs().accept(this);
         SymbolicExpression right = n.rhs();
         
-        if(right.isConstant()) {
-            throw new IllegalExpressionException("Error: cannot redefine " + right.getValue());
-        } else {
-            env.put((Variable) right, left);
-        }
+        Environment currentEnv = this.stack.peek();
+        currentEnv.put((Variable) right, left); 
         return left;
     }
     
@@ -125,20 +180,18 @@ public class EvaluationVisitor implements Visitor {
         }
     }
     
-    public SymbolicExpression visit(Constant n) {
-       // SymbolicExpression arg = n.accept(this);
-        
+    public SymbolicExpression visit(Constant n) {        
         return new Constant(n.getValue());
     }
     
     public SymbolicExpression visit(Variable n) {
-        
-        if(env.containsKey(n)) {
-            return env.get(n);
+        for(int i = this.stack.size(); i > 0; i--) {
+            Environment currentEnv = this.stack.get(i - 1);
+            if(currentEnv.containsKey(n)) {
+                return currentEnv.get(n);
+            }
         }
-        else {
-            return new Variable(n.toString());
-        }
+        return new Variable(n.toString());
     }
     
     public SymbolicExpression visit(NamedConstant n) {

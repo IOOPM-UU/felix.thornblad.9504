@@ -2,10 +2,11 @@ package org.ioopm.calculator.ast;
 
 public class NamedConstantChecker implements Visitor {
     private boolean noError;
+    
     public boolean check(SymbolicExpression a) {
-        this.noError = true; 
+        this.noError = true;
         a.accept(this);
-        return noError; 
+        return this.noError; 
     }
     
     public boolean check(Assignment topLevel) {
@@ -31,6 +32,17 @@ public class NamedConstantChecker implements Visitor {
             check(a); 
         } 
         return a;
+    }
+    
+    public SymbolicExpression visit(Conditional n) {
+        n.left().accept(this);
+        n.right().accept(this);
+        return n;
+    }
+    
+    public SymbolicExpression visit(Scope n) {
+        n.arg().accept(this);
+        return n;
     }
  
     public SymbolicExpression visit(Addition a) {
@@ -109,6 +121,22 @@ public class NamedConstantChecker implements Visitor {
     
    public SymbolicExpression visit(Ans a) {
         return a; 
+    }
+
+    public SymbolicExpression visit(Sequence n) {
+        for (SymbolicExpression line : n.body()) {
+            line.accept(this);
+        }
+        return n;
+    }
+    
+    public SymbolicExpression visit(FunctionCall n) {
+        return n;
+    }
+    
+    public SymbolicExpression visit(FunctionDeclaration n) {
+        n.sequence().accept(this);
+        return n;
     }
 }
 

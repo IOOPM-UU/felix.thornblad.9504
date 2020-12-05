@@ -22,5 +22,4 @@ public class NamedConstant extends Constant {
     public SymbolicExpression accept(Visitor v) {
         return v.visit(this);
     }
-    
 }

@@ -12,6 +12,7 @@ public class ReassignmentChecker implements Visitor {
         return this.varAssignedOnce; 
     }
     
+    
     public boolean check(Assignment a) {
         String s = a.rhs().toString();
         try {
@@ -36,6 +37,19 @@ public class ReassignmentChecker implements Visitor {
         if (a.rhs() instanceof Variable) { 
             check(a); 
         } 
+        return a;
+    }
+    
+     
+    public SymbolicExpression visit(Conditional a) {
+        a.left().accept(this);
+        a.right().accept(this);
+        return a;
+    }
+    
+    public SymbolicExpression visit(Scope a) {
+        ReassignmentChecker scopeCheck = new ReassignmentChecker();
+        this.varAssignedOnce = scopeCheck.check(a.arg());
         return a;
     }
  
@@ -109,12 +123,28 @@ public class ReassignmentChecker implements Visitor {
         return a; 
     }
     
-   public SymbolicExpression visit(Vars a) {
+    public SymbolicExpression visit(Vars a) {
         return a; 
     }
     
-   public SymbolicExpression visit(Ans a) {
+    public SymbolicExpression visit(Ans a) {
         return a; 
+    }
+    
+    public SymbolicExpression visit(Sequence n) {
+        for (SymbolicExpression line : n.body()) {
+            line.accept(this);
+        }
+        return n;
+    }
+    
+    public SymbolicExpression visit(FunctionCall n) {
+        return n;
+    }
+    
+    public SymbolicExpression visit(FunctionDeclaration n) {
+        n.sequence().accept(this);
+        return n;
     }
 }
 

@@ -22,4 +22,36 @@ Clear
 Vars
 (1 = x) + (2 = x)
 (3 = x) + (2 = y)
+(1 = x) + {(2 + x = x) + {3 + x = x}}
+(1 = x) + {(2 + x = x) + {3 + x = x} + (1 = x)}
+Clear
+{{1 = x} = x} = y
+y
+x
+1 = x
+2 = y
+if x < y { 42 } else { 4711 }
+2 = x
+if x <= y { x } else { 420 }
+3 = x
+if x >= y { y } else { 1337 }
+3 = y
+if x == y { 1 } else { 0 }
+2 = a
+3 = b
+if a == b { a } else { if a < b { a + b } else { 1337 }}
+if a == b { a } else { if a > b { a + b } else { 1337 }}
+b = a
+if a == b { a } else { if a > b { a + b } else { 1337 }}
+if x > y { y + x } else { if x == y { 1337 } else { 177013 }}
+if 1 > 2 {1} else {0}
+function foo(x, y)
+x+y
+end
+foo(1, a)
+function factorial(n)
+n - 1 = m
+if n > 1 {factorial(m) * n} else {1}
+end
+factorial(4)
 Quit

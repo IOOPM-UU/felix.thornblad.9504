@@ -33,9 +33,9 @@ public class ParserTest {
         Addition a = new Addition(new Constant(42), new Negation(new Constant(4711)));
         try {
             SymbolicExpression s = 
-                evaluator.evaluate(parse.parse(a.toString(), vars), vars);
+                evaluator.evaluate(parse.parse(a.toString(), vars), vars, vars);
                 
-            SymbolicExpression as = evaluator.evaluate(a, vars);
+            SymbolicExpression as = evaluator.evaluate(a, vars, vars);
             assertTrue(as.equals(s));
         } catch(Exception e) {
             System.out.println("Cannot parse ");
@@ -47,9 +47,9 @@ public class ParserTest {
         Assignment a = new Assignment(new Constant(42), new Variable("x"));
         try {
             SymbolicExpression s = 
-                evaluator.evaluate(parse.parse(a.toString(), vars), vars);
+                evaluator.evaluate(parse.parse(a.toString(), vars), vars, vars);
                 
-            SymbolicExpression as = evaluator.evaluate(a, vars);
+            SymbolicExpression as = evaluator.evaluate(a, vars, vars);
             assertTrue(as.equals(s));
         } catch(Exception e) {
             System.out.println("Cannot parse ");
@@ -61,9 +61,9 @@ public class ParserTest {
         Negation n = new Negation(new Negation(new Negation(new Constant(1))));
         try {
             SymbolicExpression s = 
-                evaluator.evaluate(parse.parse(n.toString(), vars), vars);
+                evaluator.evaluate(parse.parse(n.toString(), vars), vars, vars);
                 
-            SymbolicExpression as = evaluator.evaluate(n, vars);
+            SymbolicExpression as = evaluator.evaluate(n, vars, vars);
             assertTrue(as.equals(s));
         } catch(Exception e) {
             System.out.println("Cannot parse ");

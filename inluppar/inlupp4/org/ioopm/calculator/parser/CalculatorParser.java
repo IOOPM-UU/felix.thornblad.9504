@@ -6,6 +6,7 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.io.IOException;
 
+
 import java.util.*;
 
 /**
@@ -13,7 +14,7 @@ import java.util.*;
  */
 public class CalculatorParser {
     private StreamTokenizer st;
-    private Environment vars;
+    private Environment functions;
     private static char MULTIPLY = '*';
     private static char ADDITION = '+';
     private static char SUBTRACTION = '-';
@@ -26,12 +27,17 @@ public class CalculatorParser {
     private static String EXP = "Exp";
     private static char ASSIGNMENT = '=';
 
+   
     // unallowerdVars is used to check if variabel name that we
     // want to assign new meaning to is a valid name eg 3 = Quit
     // or 10 + x = L is not allowed
     private final ArrayList < String > unallowedVars = new ArrayList < String > (Arrays.asList("Quit",
         "Vars",
-        "Clear"));
+        "Clear",
+        "if",
+        "else", 
+        "function", 
+        "end"));
 
     /**
      * Used to parse the inputted string by the Calculator program
@@ -40,9 +46,9 @@ public class CalculatorParser {
      * @return a SymbolicExpression to be evaluated
      * @throws IOException by nextToken() if it reads invalid input
      */
-    public SymbolicExpression parse(String inputString, Environment vars) throws IOException {
+    public SymbolicExpression parse(String inputString, Environment functions) throws IOException {
         this.st = new StreamTokenizer(new StringReader(inputString)); // reads from inputString via stringreader.
-        this.vars = vars;
+        this.functions = functions; 
         this.st.ordinaryChar('-');
         this.st.ordinaryChar('/');
         this.st.eolIsSignificant(true);
@@ -58,21 +64,23 @@ public class CalculatorParser {
      */
     private SymbolicExpression statement() throws IOException {
         SymbolicExpression result;
-        this.st.nextToken(); //kollar på nästa token som ligger på strÃ¶mmen
+        this.st.nextToken(); //kollar på nästa token som ligger på strömmen
         if (this.st.ttype == this.st.TT_EOF) {
             throw new SyntaxErrorException("Error: Expected an expression");
         }
 
-        if (this.st.ttype == this.st.TT_WORD) { // vilken typ det senaste tecken vi lÃ¤ste in hade.
-            if (this.st.sval.equals("Quit") || this.st.sval.equals("Vars") || this.st.sval.equals("Clear") || this.st.sval.equals("Ans")){ // sval = string Variable
+        if (this.st.ttype == this.st.TT_WORD) { // vilken typ det senaste tecken vi läste in hade.
+            if (this.st.sval.equals("Quit") || this.st.sval.equals("Vars") || this.st.sval.equals("Clear") || this.st.sval.equals("Ans")) { // sval = string Variable
                 result = command();
             } else {
-                result = assignment(); // gÃ¥r vidare med uttrycket.
+                //else if (this.st.sval.equals("if")) {
+                //result = conditional(); } 
+                result = assignment(); // går vidare med uttrycket.
             }
         } else {
-            result = assignment(); // om inte == word, gÃ¥ till assignment Ã¤ndÃ¥ (kan vara tt_number)
+            result = assignment(); // om inte == word, gå till assignment ändå (kan vara tt_number)
         }
-
+        
         if (this.st.nextToken() != this.st.TT_EOF) { // token should be an end of stream token if we are done
             if (this.st.ttype == this.st.TT_WORD) {
                 throw new SyntaxErrorException("Error: Unexpected '" + this.st.sval + "'");
@@ -84,12 +92,31 @@ public class CalculatorParser {
     }
 
 
+    private SymbolicExpression functionCall(String identifier) throws IOException {
+        //System.out.println("-----functionCall-----"); 
+        SymbolicExpression result;
+        ArrayList<SymbolicExpression> arguments = new ArrayList<>();
+        if (this.st.nextToken() != ')')
+        {
+            arguments.add(assignment());
+            while(this.st.nextToken() == ',') {
+                this.st.nextToken();
+                arguments.add(assignment());
+            }
+        }
+        
+        //System.out.println("Arguments: " + arguments.toString()); 
+        result = new FunctionCall(new Variable(identifier), arguments);
+        return result; 
+    }
+    
     /**
      * Checks what kind of command that should be returned
      * @return an instance of Quit, Clear or Vars depending on the token parsed
      * @throws IOException by nextToken() if it reads invalid input
      */
     private SymbolicExpression command() throws IOException {
+        //System.out.println("----Command----");
         if (this.st.sval.equals("Quit")) {
             return Quit.instance();
         } else if (this.st.sval.equals("Clear")) {
@@ -112,7 +139,14 @@ public class CalculatorParser {
      *         the variable on rhs of '=' is a number or invalid variable
      */
     private SymbolicExpression assignment() throws IOException {
-        SymbolicExpression result = expression();
+        //System.out.println("----Assignment----");
+        SymbolicExpression result;
+        if (this.st.ttype == this.st.TT_WORD && this.st.sval.equals("if")) {
+            result = conditional();
+            return result;
+        }
+        
+        result = expression();
         this.st.nextToken();
         while (this.st.ttype == ASSIGNMENT) {
             this.st.nextToken();
@@ -120,6 +154,8 @@ public class CalculatorParser {
                 throw new SyntaxErrorException("Error: Numbers cannot be used as a variable name");
             } else if (this.st.ttype != this.st.TT_WORD) {
                 throw new SyntaxErrorException("Error: Not a valid assignment of a variable"); //this handles faulty inputs after the equal sign eg. 1 = (x etc
+            } else if (functions.containsKey(new Variable(this.st.sval))) {
+                throw new SyntaxErrorException("Error: Cannot use function name as variable");
             } else {
                 if (this.st.sval.equals("ans")) {
                     throw new SyntaxErrorException("Error: ans cannot be redefined");
@@ -140,19 +176,24 @@ public class CalculatorParser {
      * @throws IllegalExpressionException if you try to redefine a string that isn't allowed
      */
    private SymbolicExpression identifier() throws IOException {
-   
+        //System.out.println("----Identifier----");
         SymbolicExpression result;
-        
-        if (this.unallowedVars.contains(this.st.sval)) {
-                throw new IllegalExpressionException("Error: cannot redefine " + this.st.sval);
-         }
-        if (Constants.namedConstants.containsKey(this.st.sval)) {
-            result = new NamedConstant(st.sval, Constants.namedConstants.get(st.sval));
+        String identifier = this.st.sval;
+        if (this.st.nextToken() == '(') {
+            result = new Scope(functionCall(identifier));
+            return result; 
         } else {
-            result = new Variable(this.st.sval);
+            if (this.unallowedVars.contains(identifier)) {
+                throw new IllegalExpressionException("Error: cannot redefine " + identifier);
+            } else if (Constants.namedConstants.containsKey(identifier)) {
+                result = new NamedConstant(st.sval, Constants.namedConstants.get(identifier));
+            } else {
+                result = new Variable(identifier);
+            }
         }
+        this.st.pushBack(); 
         return result;
-        }
+    }
 
 
     /**
@@ -162,6 +203,7 @@ public class CalculatorParser {
      * @throws IOException by nextToken() if it reads invalid input
      */
     private SymbolicExpression expression() throws IOException {
+        //System.out.println("----Expression----");
         SymbolicExpression result = term();
         this.st.nextToken();
         while (this.st.ttype == ADDITION || this.st.ttype == SUBTRACTION) {
@@ -177,7 +219,45 @@ public class CalculatorParser {
         this.st.pushBack();
         return result;
     }
-
+    
+    private SymbolicExpression conditional() throws IOException {
+        //System.out.println("----Conditional----");
+        SymbolicExpression result;
+        this.st.nextToken();
+        SymbolicExpression left = primary();
+        //System.out.println("Left: " + left.toString());
+        String operation = "";
+        this.st.nextToken();
+        
+        if (this.st.ttype == '<' || this.st.ttype == '>' || this.st.ttype == '=') {
+            operation += ((char) this.st.ttype); 
+            this.st.nextToken(); 
+            if (this.st.ttype == '=') {
+                operation += (char) (this.st.ttype);
+                this.st.nextToken();
+            }
+        }
+        else {
+            throw new SyntaxErrorException("expected operator '>' '<' '<=' '>=' '=='"); 
+        }
+        
+        SymbolicExpression right = primary();
+        //System.out.println("Left: " + left.toString());
+        this.st.nextToken();
+        SymbolicExpression ifTrue = assignment();        
+        this.st.nextToken(); 
+        if (!(this.st.ttype == this.st.TT_WORD && this.st.sval.equals("else"))) {
+            throw new SyntaxErrorException("expected 'else'"); 
+        }
+        
+        this.st.nextToken();
+        SymbolicExpression ifFalse = assignment();
+        //System.out.println(ifTrue);
+        //System.out.println(ifFalse);
+        result = new Conditional(left, operation, right, ifTrue, ifFalse);        
+        return result;
+    }
+    
     /**
      * Checks wether the token read is an Multiplication or
      * Division and then continue on with the right hand side of
@@ -186,7 +266,9 @@ public class CalculatorParser {
      * @throws IOException by nextToken() if it reads invalid input
      */
     private SymbolicExpression term() throws IOException {
+        //System.out.println("----Term----");
         SymbolicExpression result = primary();
+        //System.out.println("term??");
         this.st.nextToken();
         while (this.st.ttype == MULTIPLY || this.st.ttype == DIVISION) {
             int operation = st.ttype;
@@ -194,6 +276,7 @@ public class CalculatorParser {
 
             if (operation == MULTIPLY) {
                 result = new Multiplication(result, primary());
+               // System.out.println("multip??");
             } else {
                 result = new Division(result, primary());
             }
@@ -215,6 +298,7 @@ public class CalculatorParser {
      *         missing right parantheses
      */
     private SymbolicExpression primary() throws IOException {
+        //System.out.println("----Primary----");
         SymbolicExpression result;
         if (this.st.ttype == '(') {
             this.st.nextToken();
@@ -222,6 +306,12 @@ public class CalculatorParser {
             /// This captures unbalanced parentheses!
             if (this.st.nextToken() != ')') {
                 throw new SyntaxErrorException("expected ')'");
+            }
+        } else if (this.st.ttype == '{') {
+            this.st.nextToken();
+            result = new Scope(assignment());
+            if (this.st.nextToken() != '}') {
+                throw new SyntaxErrorException("Expected '}'"); 
             }
         } else if (this.st.ttype == NEGATION) {
             result = unary();
@@ -250,6 +340,7 @@ public class CalculatorParser {
      * @throws IOException by nextToken() if it reads invalid input
      */
     private SymbolicExpression unary() throws IOException {
+        //System.out.println("----Unary----");
         SymbolicExpression result;
         int operationNeg = st.ttype;
         String operation = st.sval;
@@ -276,6 +367,7 @@ public class CalculatorParser {
      *         expected a number which is not present
      */
     private SymbolicExpression number() throws IOException {
+        //System.out.println("----Number----");
         this.st.nextToken();
         if (this.st.ttype == this.st.TT_NUMBER) {
             return new Constant(this.st.nval);

@@ -16,9 +16,33 @@ b + 1.0
 Variables: a = 1.0, ans = 2.0, b = 2.0, c = b + 1.0, x = 1.0, y = 2.0, z = 4.0
 Infinity
 Error: Expected number
-Error: Unexpected '('
+null
 Error: cannot redefine Quit
 Variables: 
 Error, the variable x is reassigned.
 5.0
+10.0
+Error, the variable x is reassigned.
+1.0
+1.0
+x
+1.0
+2.0
+42.0
+2.0
+2.0
+3.0
+2.0
+3.0
+1.0
+2.0
+3.0
+5.0
+1337.0
+3.0
+3.0
+1337.0
+0.0
+4.0
+24.0
 

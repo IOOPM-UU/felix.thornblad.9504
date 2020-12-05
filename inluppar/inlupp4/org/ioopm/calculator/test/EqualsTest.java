@@ -24,8 +24,8 @@ public class EqualsTest {
         Addition a = new Addition(c1, c2); 
         Constant three = new Constant(3);
         Multiplication m = new Multiplication(c1, three);
-        SymbolicExpression q = evaluator.evaluate(m, env);
-        SymbolicExpression r = evaluator.evaluate(a, env);
+        SymbolicExpression q = evaluator.evaluate(m, env, env);
+        SymbolicExpression r = evaluator.evaluate(a, env, env);
         assertTrue((r.equals(q)));
         assertEquals(m.toString(), "" + value + " * " + three); 
     }
@@ -37,8 +37,8 @@ public class EqualsTest {
         Negation neg = new Negation(c2);
         Addition a = new Addition(c1, c2); 
         Subtraction s = new Subtraction(c1, neg);
-        SymbolicExpression q = evaluator.evaluate(a, env);
-        SymbolicExpression r = evaluator.evaluate(s, env);
+        SymbolicExpression q = evaluator.evaluate(a, env, env);
+        SymbolicExpression r = evaluator.evaluate(s, env, env);
         assertTrue((r.equals(q)));
         assertEquals(s.toString(), "" + value + " - " + "(-" + c2.toString() + ")"); 
     }
@@ -49,7 +49,7 @@ public class EqualsTest {
         Constant c2 = new Constant(value);
         Division d = new Division(c1, (new Exp(c2)));
         
-        SymbolicExpression q = evaluator.evaluate(d, env);
+        SymbolicExpression q = evaluator.evaluate(d, env, env);
         assertEquals(d.toString(), "" + c1 + d.getName() + "exp(" + c2 + ")");
     }
     

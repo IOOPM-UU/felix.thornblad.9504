@@ -30,7 +30,7 @@ public class IsConstantTest {
         Constant c2 = new Constant(rng.nextDouble());
         Addition a = new Addition(c1, c2); 
         assertTrue(!a.isConstant());
-        SymbolicExpression r = evaluator.evaluate(a, env);
+        SymbolicExpression r = evaluator.evaluate(a, env, env);
         assertTrue(r.isConstant());
     }
     
@@ -40,7 +40,7 @@ public class IsConstantTest {
         Constant c2 = new Constant(rng.nextDouble());
         Subtraction s = new Subtraction(c1, c2); 
         assertTrue(!s.isConstant());
-        SymbolicExpression r = evaluator.evaluate(s, env);
+        SymbolicExpression r = evaluator.evaluate(s, env, env);
         assertTrue(r.isConstant());
     }
     
@@ -50,7 +50,7 @@ public class IsConstantTest {
         Constant c2 = new Constant(rng.nextDouble());
         Multiplication m = new Multiplication(c1, c2); 
         assertTrue(!m.isConstant());
-        SymbolicExpression r = evaluator.evaluate(m, env);
+        SymbolicExpression r = evaluator.evaluate(m, env, env);
         assertTrue(r.isConstant());
     }
     
@@ -60,7 +60,7 @@ public class IsConstantTest {
         Constant c2 = new Constant(rng.nextDouble());
         Division d = new Division(c1, c2); 
         assertTrue(!d.isConstant());
-        SymbolicExpression r = evaluator.evaluate(d, env);
+        SymbolicExpression r = evaluator.evaluate(d, env, env);
         assertTrue(r.isConstant());
     }
     
@@ -70,7 +70,7 @@ public class IsConstantTest {
         Variable v = new Variable("x");
         Assignment a = new Assignment(c1, v);
         assertTrue(!a.isConstant());
-        SymbolicExpression r = evaluator.evaluate(a, env);
+        SymbolicExpression r = evaluator.evaluate(a, env, env);
         assertTrue(r.isConstant());
     }
     
@@ -79,7 +79,7 @@ public class IsConstantTest {
         Constant c1 = new Constant(value);
         Cos c = new Cos(c1);
         assertTrue(!c.isConstant());
-        SymbolicExpression r = evaluator.evaluate(c, env);
+        SymbolicExpression r = evaluator.evaluate(c, env, env);
         assertTrue(r.isConstant());
     }
     
@@ -88,7 +88,7 @@ public class IsConstantTest {
         Constant c1 = new Constant(value);
         Sin s = new Sin(c1);
         assertTrue(!s.isConstant());
-        SymbolicExpression r = evaluator.evaluate(s, env);
+        SymbolicExpression r = evaluator.evaluate(s, env, env);
         assertTrue(r.isConstant());
     }
    
@@ -97,7 +97,7 @@ public class IsConstantTest {
         Constant c1 = new Constant(value);
         Exp e = new Exp(c1);
         assertTrue(!e.isConstant());
-        SymbolicExpression r = evaluator.evaluate(e, env);
+        SymbolicExpression r = evaluator.evaluate(e, env, env);
         assertTrue(r.isConstant());
     }
     
@@ -106,7 +106,7 @@ public class IsConstantTest {
         Constant c1 = new Constant(value);
         Log l = new Log(c1);
         assertTrue(!l.isConstant());
-        SymbolicExpression r = evaluator.evaluate(l, env);
+        SymbolicExpression r = evaluator.evaluate(l, env, env);
         assertTrue(r.isConstant());
     }
     
@@ -115,7 +115,7 @@ public class IsConstantTest {
         Constant c1 = new Constant(value);
         Negation n = new Negation(c1);
         assertTrue(!n.isConstant());
-        SymbolicExpression r = evaluator.evaluate(n, env);
+        SymbolicExpression r = evaluator.evaluate(n, env, env);
         assertTrue(r.isConstant());
     }
     
